@@ -13,8 +13,6 @@ function TableView({ data }) {
     "Email",
     "Project",
     "Domain",
-    "PPT",
-    "Prompt",
     "Amount Paid",
     "Mode",
     "Transaction ID",
@@ -23,18 +21,15 @@ function TableView({ data }) {
   ];
 
   const getCellValue = (row, index) => {
-    // Note: data indexes in the row might still be original
-    // 0: Number, 1: Name, 2: Leader, 3: Phone, 4: Email, 5: Project, 6: Domain
+    // 0: Number, 1: Size, 2: Name, 3: Leader, 4: Phone, 5: Email, 6: Project, 7: Domain
   const mapping = {
     "Team Number": 0,
-    "Team Name": 1,
-    "Team Leader": 2,
-    "Phone": 3,
-    "Email": 4,
-    "Project": 5,
-    "Domain": 6,
-    "PPT": 7,
-    "Prompt": 8,
+    "Team Name": 2,
+    "Team Leader": 3,
+    "Phone": 4,
+    "Email": 5,
+    "Project": 6,
+    "Domain": 7,
     "Amount Paid": 9,
     "Mode": 10,
     "Transaction ID": 11,
@@ -53,7 +48,7 @@ function TableView({ data }) {
   // Get unique domains for the filter
   const domains = useMemo(() => {
     if (!Array.isArray(data)) return [];
-    const uniqueDomains = new Set(data.map((row) => getCellValue(row, 6)).filter(Boolean));
+    const uniqueDomains = new Set(data.map((row) => getCellValue(row, "Domain")).filter(Boolean));
     return ["all", ...Array.from(uniqueDomains).sort()];
   }, [data]);
 
@@ -65,7 +60,7 @@ function TableView({ data }) {
     // Domain Filter
     if (domainFilter !== "all") {
       processed = processed.filter(
-        (row) => getCellValue(row, 6) === domainFilter
+        (row) => getCellValue(row, "Domain") === domainFilter
       );
     }
 
@@ -73,10 +68,10 @@ function TableView({ data }) {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       processed = processed.filter((row) => {
-        const teamNumber = String(getCellValue(row, 0)).toLowerCase();
-        const teamName = String(getCellValue(row, 1)).toLowerCase();
-        const teamLeader = String(getCellValue(row, 2)).toLowerCase();
-        const domain = String(getCellValue(row, 6)).toLowerCase();
+        const teamNumber = String(getCellValue(row, "Team Number")).toLowerCase();
+        const teamName = String(getCellValue(row, "Team Name")).toLowerCase();
+        const teamLeader = String(getCellValue(row, "Team Leader")).toLowerCase();
+        const domain = String(getCellValue(row, "Domain")).toLowerCase();
 
         return (
           teamNumber.includes(query) ||
@@ -93,22 +88,22 @@ function TableView({ data }) {
         let valA, valB;
 
         if (sortConfig.includes("Name")) {
-          valA = String(getCellValue(a, 1)).toLowerCase();
-          valB = String(getCellValue(b, 1)).toLowerCase();
+          valA = String(getCellValue(a, "Team Name")).toLowerCase();
+          valB = String(getCellValue(b, "Team Name")).toLowerCase();
           return sortConfig === "NameAZ"
             ? valA.localeCompare(valB)
             : valB.localeCompare(valA);
         }
 
         if (sortConfig.includes("Number")) {
-          valA = parseFloat(getCellValue(a, 0)) || 0;
-          valB = parseFloat(getCellValue(b, 0)) || 0;
+          valA = parseFloat(getCellValue(a, "Team Number")) || 0;
+          valB = parseFloat(getCellValue(b, "Team Number")) || 0;
           return sortConfig === "NumberAsc" ? valA - valB : valB - valA;
         }
 
         if (sortConfig.includes("Domain")) {
-          valA = String(getCellValue(a, 6)).toLowerCase();
-          valB = String(getCellValue(b, 6)).toLowerCase();
+          valA = String(getCellValue(a, "Domain")).toLowerCase();
+          valB = String(getCellValue(b, "Domain")).toLowerCase();
           return sortConfig === "DomainAZ"
             ? valA.localeCompare(valB)
             : valB.localeCompare(valA);
