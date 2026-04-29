@@ -11,6 +11,7 @@ function TableView({ data }) {
     "Team Number",
     "Team Name",
     "Team Leader",
+    "Members",       // ✅ NEW
     "Phone",
     "Email",
     "Project",
@@ -24,17 +25,18 @@ function TableView({ data }) {
 
   const mapping = {
     "Team Number": 0,
-    "Team Name": 2,
-    "Team Leader": 3,
+    "Team Name": 1,
+    "Team Leader": 2,
+    "Members": 3,        // ✅ NEW
     "Phone": 4,
     "Email": 5,
     "Project": 6,
     "Domain": 7,
-    "Amount Paid": 9,
-    "Mode": 10,
-    "Transaction ID": 11,
-    "Date": 12,
-    "Screenshot": 13,
+    "Amount Paid": 8,
+    "Mode": 9,
+    "Transaction ID": 10,
+    "Date": 11,
+    "Screenshot": 12,
   };
 
   const getCellValue = (row, colKey) => {
